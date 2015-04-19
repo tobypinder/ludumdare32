@@ -34,6 +34,15 @@ var GameViewText = {
     }
     this.actions = []
   },
+  wipeMainScreen:function()
+  {
+    for(var i=2;i<this.lines-3;i++)
+    {
+      this.content[i]        = ""
+      this.displayContent[i] = ""
+    }
+    this.actions = []
+  },
   parseLine:function(x)
   {
     var line      = this.content[x];
@@ -107,7 +116,7 @@ var GameViewText = {
 
     if(keys.space)
     {
-      this.advanceChars(10);
+      this.advanceChars(15);
     }
   },
   advanceChars:function(chars)
@@ -173,15 +182,15 @@ var GameViewText = {
 
     GameViewText.changeLine(21, "-----------------------------------------------------------------------")
     team = GamePlayer.team.length
+    targets = GamePlayer.targets.length
 
-
-    GameViewText.changeLine(22, "{Sitrep}    {Team}"+team+"     {Targets}0     {Date}"+GameDay.displayDate(GamePlayer.date)+"     {BTC}"+GamePlayer.totals.btc.toFixed(8))
+    GameViewText.changeLine(22, "{Sitrep}    {Team}"+team+"     {Targets}"+targets+"    {Date}"+GameDay.displayDate(GamePlayer.date)+"     {BTC}"+GamePlayer.totals.btc.toFixed(8))
   },
   frame:function()
   {
     this.navigate();
 
-    this.advanceChars(4);
+    this.advanceChars(7);
 
     GameView.ctx.font="24px Ubuntu Mono";
 

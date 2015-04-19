@@ -97,7 +97,8 @@ var GameDay = {
   seedRandom:function()
   {
     this.seedRandomMemberEvent();
-
+    this.seedRandomPwnTargetEvent();
+    this.seedRandomGenerateExploitEvent();
     this.seedRandomDay();
   },
   seedRandomDay:function()
@@ -109,21 +110,70 @@ var GameDay = {
       }
     }
   },
+  seedRandomGenerateExploitEvent:function()
+  {
+    // CHANCE
+    var added_chance = (GamePlayer.totals.skills.exploitation() / 20) - (GamePlayer.daysCompleted / 70)
+
+    added_chance = Math.max(added_chance, 0)
+    var chance = this.goodEventChance(0.4, 0.5, 0.1) + added_chance
+    var roll   = Math.random()
+    //
+
+    if(roll <= chance)
+    {
+      var event = {
+        text: Generator.message_generate_exploit(),
+        actions: {
+          'Stockpile': function()
+          {
+            GamePlayer.totals.exploits.standard += 1
+          }
+        }
+      }
+
+      GameDay.events.push(event)
+    }
+  },
   seedRandomMemberEvent:function()
   {
-    // A random day
-    chance = this.goodEventChance(0.2, 0.1, 0.1)
+    // CHANCE
+    chance = this.goodEventChance(0.1, 0.05, 0.1)
     roll   = Math.random()
+    //
 
     if(roll <= chance)
     {
       GameDay.events.push(this.getMemberOffer())
     }
   },
+  seedRandomPwnTargetEvent:function()
+  {
+    // CHANCE
+    var added_chance = (GamePlayer.totals.skills.scanning() / 20) - (GamePlayer.daysCompleted / 70)
+
+    added_chance = Math.max(added_chance, 0)
+    var chance = this.goodEventChance(0.2, 0.5 , 0.1) + added_chance
+    var roll   = Math.random()
+    //
+
+    if(roll <= chance)
+    {
+      var target = GamePlayer.generateTarget('PWN')
+      var event = {
+        text: Generator.message_new_pwn_target(target),
+        actions: {
+          'Add': function() {
+            GamePlayer.targets.push(target);
+          }
+        }
+      }
+      GameDay.events.push(event);
+    }
+  },
   seedStaticFirstDay:function()
   {
     member = GamePlayer.generateTeamMember();
-
 
     GameDay.current = this.getMemberOffer(
       member,
@@ -145,7 +195,7 @@ var GameDay = {
     //       'OK?': function(){}
     //     }
     //   },
-    //   true //false
+    //   true // false
     // )
   },
 
@@ -162,7 +212,7 @@ var GameDay = {
       actions: {
         'Accept': function(){
           GamePlayer.addMember(member)
-          event = {
+          var event = {
             text: text_accept.concat(Generator.member_stats(member)),
             actions: {
               'Continue': function() {}
@@ -170,7 +220,7 @@ var GameDay = {
           }
         },
         'Reject': function(){
-          event = {
+          var event = {
             text: text_reject,
             actions: {
               'Continue': function() {}

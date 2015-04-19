@@ -110,7 +110,6 @@ var GameMenuState = {
   {
     GameViewText.wipeScreen()
 
-
     if(GameDay.current == null)
     {
       GameDay.advance();
@@ -141,6 +140,7 @@ var GameMenuState = {
   {
     GameViewText.wipeScreen()
     GameViewText.header()
+
     Calendar.renderCalendar();
 
     GameViewText.footer()
@@ -150,12 +150,15 @@ var GameMenuState = {
     GameViewText.wipeScreen()
     GameViewText.header()
 
+    Targets.renderTargets();
+
     GameViewText.footer()
   },
   applyBTC:function()
   {
     GameViewText.wipeScreen()
     GameViewText.header()
+
     Wallet.renderTransactions();
 
     GameViewText.footer()
@@ -169,5 +172,4 @@ var GameMenuState = {
     GamePlayer.balanceSheet.push([GamePlayer.date, reason, amount])
     GamePlayer.totals.btc += amount
   },
-
 }

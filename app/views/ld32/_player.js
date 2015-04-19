@@ -59,20 +59,35 @@ var GamePlayer = {
     var member = {
       name: Generator.team_member(),
       skills: {
-        attribution: this.generateStat(0.1, 0.5, 0.01, 1, 3),
-        scanning: this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        attribution:  this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        scanning:     this.generateStat(0.1, 0.5, 0.01, 1, 3),
         exploitation: this.generateStat(0.1, 0.5, 0.01, 1, 3),
-        pwnage: this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        pwnage:       this.generateStat(0.1, 0.5, 0.01, 1, 3),
       },
       btc: this.generateStat(0.02, 0.1, 0.01, 1.5, 8)
     }
     return member;
   },
+  generateTarget: function(type)
+  {
+    var ip = '' +Math.floor(Math.random() * 0x100) + '.' + Math.floor(Math.random() * 0x100) + '.' + Math.floor(Math.random() * 0x100) + '.' + Math.floor(Math.random() * 0x100)
+    //TODO: More diverse than "pwnage" targets
+    return {
+      ip: ip ,
+      type: type,
+      stats: {
+        attribution: 5, // % to be detected on failure
+        scannability: 1,
+        exploitability: 1,
+        pwnability: 1
+      }
+    }
+  },
   generateStat:function(multiplier, addition, day_multiplier, day_power, digits) {
     var base = Math.cos(Math.random() * Math.PI) * multiplier + addition
     var days = Math.pow((Math.random() * (this.daysCompleted + 1 ) * day_multiplier), day_power)
 
-    return parseFloat((base + days).toFixed(digits))
+    return roundStat((base + days), digits)
   },
   addMember:function(member)
   {
@@ -115,7 +130,7 @@ var GamePlayer = {
     if(income > 0)
     {
       this.balanceSheet.push([this.date, 'Botnet lease', +income.toFixed(8)])
-      this.totals.btc += parseFloat(income.toFixed(8))
+      this.totals.btc += roundStat(income, 8)
     }
 
     return income
@@ -137,3 +152,5 @@ var GamePlayer = {
     return bailout;
   }
 }
+
+

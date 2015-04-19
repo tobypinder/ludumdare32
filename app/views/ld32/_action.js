@@ -55,30 +55,31 @@ var GameAction = {
     {
       case 'Sitrep':
         GameMenuState.changeState('day');
+        return true;
       break;
       case 'Team':
         GameMenuState.changeState('team');
+        return true;
       break;
       case 'Targets':
         GameMenuState.changeState('targets');
+        return true;
       break;
       case 'Date':
         GameMenuState.changeState('date');
+        return true;
       break;
       case 'BTC':
         GameMenuState.changeState('btc');
+        return true;
       break;
     }
-  },
-  footerMethods: function()
-  {
-    ['Sitrep', 'Team', 'Targets', 'Date', 'BTC']
+
+    return false;
   },
   applyActionForDay:function(name)
   {
     this.applyActionForFooter(name);
-
-
     var firedEvent = false
 
     if(GameDay.events.length > 0)
@@ -116,7 +117,51 @@ var GameAction = {
   },
   applyActionForTargets:function(name)
   {
-    this.applyActionForFooter(name);
+    if(this.applyActionForFooter(name))
+    {
+      //do nothing
+    } else if(name.indexOf('Inspect') !== -1 )
+    {
+      name = name.split('#')
+      idx = name[1]
+      Targets.renderTargetDetail(idx)
+
+    } else {
+      switch(name)
+      {
+
+        case 'Next':
+          Targets.currentPage++;
+          GameMenuState.changeState('targets');
+        break;
+        case 'Prev':
+          Targets.currentPage--;
+          GameMenuState.changeState('targets');
+        break;
+
+        case 'Proxy':
+          // TODO: Chance
+          GamePlayer.totals.pwned.proxies ++;
+          GamePlayer.targets.splice(Targets.currentTarget, 1)
+          this.resetTargetState();
+        break;
+        case 'Slave':
+          // TODO: Chance
+          GamePlayer.totals.pwned.botnet ++;
+          GamePlayer.targets.splice(Targets.currentTarget, 1)
+          this.resetTargetState();
+        break;
+        default:
+          console.warn('Unknown Action on Target: ['+ name +']')
+        break;
+      }
+    }
+  },
+  resetTargetState:function()
+  {
+    GameMenuState.changeState('targets');
+    Targets.currentPage = 0
+    Targets.currentTarget = null
   },
   applyActionForDate:function(name)
   {
