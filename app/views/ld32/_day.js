@@ -89,21 +89,43 @@ var GameDay = {
       GameViewText.changeLine(startLine++, "{" + key + "}")
     });
   },
+
+  goodEventChance:function(always, perc, dep)
+  {
+    return (perc * Math.pow(1-perc, dep * GamePlayer.daysCompleted)) + always
+  },
   seedRandom:function()
   {
-    // TODO: ALL THE GENERATION!
-    GameDay.current.text = [
-      "Nothing Happened."
-    ]
+    this.seedRandomMemberEvent();
+
+    this.seedRandomDay();
+  },
+  seedRandomDay:function()
+  {
+    // TODO: Generate more dynamic actual days.
+    GameDay.current.text = Generator.message_day_nothing(),
     GameDay.current.actions = {
-      'Advance': function(){
+      'Continue': function(){
       }
+    }
+  },
+  seedRandomMemberEvent:function()
+  {
+    // A random day
+    chance = this.goodEventChance(0.2, 0.1, 0.1)
+    roll   = Math.random()
+
+    if(roll <= chance)
+    {
+      GameDay.events.push(this.getMemberOffer())
     }
   },
   seedStaticFirstDay:function()
   {
     member = GamePlayer.generateTeamMember();
-    this.seedMemberOffer(
+
+
+    GameDay.current = this.getMemberOffer(
       member,
       [
         "Asset "+ member.name + ' reporting in.',
@@ -114,66 +136,61 @@ var GameDay = {
     )
 
     //TODO: Remove
-    this.addEventToCalendar(
-      this.in_x_days(GamePlayer.date, 3),
-      {
-        text: ['Oopsie doopsie!'],
-        actions: {
-          'OK?': function(){}
-        }
-      },
-      true //false
-    )
+    // this.addEventToCalendar(
+    //   this.in_x_days(GamePlayer.date, 3),
+    //   {
+    //     name: 'Hello',
+    //     text: ['Oopsie doopsie!'],
+    //     actions: {
+    //       'OK?': function(){}
+    //     }
+    //   },
+    //   true //false
+    // )
   },
 
-  seedMemberOffer:function(member, text, text_accept, text_reject)
+  getMemberOffer:function(member, text, text_accept, text_reject)
   {
     if (typeof member === 'undefined')      { member      = GamePlayer.generateTeamMember(); }
-    if (typeof text === 'undefined')        { text        = Generator.message_member_offer(); }
+    if (typeof text === 'undefined')        { text        = Generator.message_member_offer(member); }
     if (typeof text_accept === 'undefined') { text_accept = Generator.message_member_accept(); }
     if (typeof text_reject === 'undefined') { text_reject = Generator.message_member_refusal(); }
 
-    GameDay.current.member_offer = member
-    GameDay.current.text = text
-
-    GameDay.current.actions = {
-      'Accept': function(){
-        GamePlayer.addMember(member)
-        event = {
-          text: text_accept.concat(Generator.member_stats(member)),
-          actions: {
-            'Continue': function() {}
+    return {
+      member_offer: member,
+      text: text,
+      actions: {
+        'Accept': function(){
+          GamePlayer.addMember(member)
+          event = {
+            text: text_accept.concat(Generator.member_stats(member)),
+            actions: {
+              'Continue': function() {}
+            }
           }
-        }
-      },
-      'Reject': function(){
-        event = {
-          text: text_reject,
-          actions: {
-            'Continue': function() {}
+        },
+        'Reject': function(){
+          event = {
+            text: text_reject,
+            actions: {
+              'Continue': function() {}
+            }
           }
+          GameDay.events.push(event)
         }
-        console.log(event);
-        GameDay.events.push(event)
       }
     }
-
   },
 
   addEventToCalendar:function(date, event, visibility)
   {
-    this.calendar.push([date, event, visibility])
+    this.calendar.push({date: date, event: event, visibility: visibility})
   },
   addEventsFromCalendar:function() {
-    console.log("Date:")
-    console.log(GamePlayer.date)
-    console.log("---")
     this.calendar.forEach(function(entry) {
-
-      console.log(entry)
-      if(entry[0].valueOf() == GamePlayer.date.valueOf())
+      if(entry.date.valueOf() == GamePlayer.date.valueOf())
       {
-        GameDay.events.push(entry[1])
+        GameDay.events.push(entry.event)
       }
     });
   },
@@ -181,6 +198,7 @@ var GameDay = {
   seedBailoutEvent:function()
   {
     event = {
+      name: 'Bailout',
       text: [
         "Fiscal performance is unacceptable.",
         "Emergency Program Funding has been activated.",

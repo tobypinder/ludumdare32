@@ -141,6 +141,7 @@ var GameMenuState = {
   {
     GameViewText.wipeScreen()
     GameViewText.header()
+    Calendar.renderCalendar();
 
     GameViewText.footer()
   },

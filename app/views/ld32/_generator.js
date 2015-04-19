@@ -58,6 +58,20 @@ var Generator = {
       'going on...'
     ],
   ],
+  day_nothing: [
+    [
+      'Nothing to report.'
+    ],
+    [
+      'Awaiting Instructions'
+    ],
+    [
+      'Scanning /0. '
+    ],
+    [
+      'System nominal.'
+    ],
+  ],
   team_member: function()
   {
     var name1 = this.p1[Math.floor(Math.random() * this.p1.length)]
@@ -73,9 +87,13 @@ var Generator = {
   {
     return this.member_accept[Math.floor(Math.random() * this.member_accept.length)]
   },
-  message_member_offer: function()
+  message_member_offer: function(member)
   {
-    return this.member_offer[Math.floor(Math.random() * this.member_offer.length)]
+    return this.member_offer[Math.floor(Math.random() * this.member_offer.length)].concat(Generator.member_stats(member))
+  },
+  message_day_nothing: function()
+  {
+    return this.day_nothing[Math.floor(Math.random() * this.day_nothing.length)]
   },
   member_stats: function(member)
   {

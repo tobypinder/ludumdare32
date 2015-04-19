@@ -86,7 +86,7 @@ var GameAction = {
       $.each(GameDay.events[0].actions, function(action, method)
       {
         if(name == action) {
-          console.log('Performing Event action [' + action + ']')
+
           method()
           firedEvent = true
           GameDay.events.shift()
@@ -96,7 +96,7 @@ var GameAction = {
       $.each(GameDay.current.actions, function(action, method)
       {
         if(name == action) {
-          console.log('Performing Day action [' + action + ']')
+
           method()
           firedEvent = true
           GameDay.current = null

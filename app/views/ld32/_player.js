@@ -4,6 +4,7 @@ var GamePlayer = {
   date: new Date(1970, 3, 1),
   daysCompleted: 0,
   team: [],
+  targets: [],
   balanceSheet: [],
   totals: {
     btc: 0,
@@ -55,17 +56,23 @@ var GamePlayer = {
   },
   generateTeamMember:function()
   {
-    member = {
+    var member = {
       name: Generator.team_member(),
       skills: {
-        attribution: +(Math.cos(Math.random() * Math.PI) * 0.1 + 0.3).toFixed(3),
-        scanning:  +(Math.cos(Math.random() * Math.PI) * 0.1 + 0.5).toFixed(3),
-        exploitation: +(Math.cos(Math.random() * Math.PI) * 0.2 + 0.8).toFixed(3),
-        pwnage: +(Math.cos(Math.random() * Math.PI) * 0.05 + 0.1).toFixed(3)
+        attribution: this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        scanning: this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        exploitation: this.generateStat(0.1, 0.5, 0.01, 1, 3),
+        pwnage: this.generateStat(0.1, 0.5, 0.01, 1, 3),
       },
-      btc: 0.1
+      btc: this.generateStat(0.02, 0.1, 0.01, 1.5, 8)
     }
     return member;
+  },
+  generateStat:function(multiplier, addition, day_multiplier, day_power, digits) {
+    var base = Math.cos(Math.random() * Math.PI) * multiplier + addition
+    var days = Math.pow((Math.random() * (this.daysCompleted + 1 ) * day_multiplier), day_power)
+
+    return parseFloat((base + days).toFixed(digits))
   },
   addMember:function(member)
   {
@@ -103,6 +110,15 @@ var GamePlayer = {
   performIncome:function()
   {
     //TODO
+    var income = (Math.sin(Math.random()) * this.totals.pwned.botnet) * 0.1
+
+    if(income > 0)
+    {
+      this.balanceSheet.push([this.date, 'Botnet lease', +income.toFixed(8)])
+      this.totals.btc += parseFloat(income.toFixed(8))
+    }
+
+    return income
   },
   performBailout:function()
   {
