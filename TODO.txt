@@ -1,0 +1,35 @@
+
+XXXXX  XXXX  XXX   XXXX
+  X    X  X  X  X  X  X
+  X    XXXX  XXX   XXXX
+
+XXXXXXXXXXXXXXXXXXXXXXX
+
+* Content
+  * Encounters - Random - Choices and Stats matter
+  * Difficulty
+* Entire Targets interface
+  * List of IPs with Task Types
+    * DDOS (Botnet Count)
+    * Slave (Can Proxy/Botnet)
+
+* Features of Main Gameplay
+  * Attribution to increase freq. of Attribution Events
+    * These are large bump to approval rating
+    * increased recruitment for next month (scheduled recruitment opportunities)
+  * Botnet provides some passive income (low)
+  * Proxies raise Deniability, reducing chance of getting busted!
+  * Exploitation raises % chances of using Exploits
+  * Pwnage raises % chance of creating Proxies / Botnets
+  * Scanning adds more targets randomly.
+  * IDEA: Use calendar for defensive events (other states locking on?)
+* Features of Other Gameplay
+  * Calendar Events visible
+  * Fire team members
+
+* UI
+  * Garbled letters at low Approval Rating
+
+Probably Cut:
+* Sound Effects
+* Real time interaction

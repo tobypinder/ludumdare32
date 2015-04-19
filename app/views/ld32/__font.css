@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'ubuntu_monoregular';
+    src: url('fonts/ubuntumono-r.eot');
+    src: url('fonts/ubuntumono-r.eot?#iefix') format('embedded-opentype'),
+         url('fonts/ubuntumono-r.woff2') format('woff2'),
+         url('fonts/ubuntumono-r.woff') format('woff'),
+         url('fonts/ubuntumono-r.ttf') format('truetype'),
+         url('fonts/ubuntumono-r.svg#ubuntu_monoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

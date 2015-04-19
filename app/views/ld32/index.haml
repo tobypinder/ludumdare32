@@ -1,0 +1,31 @@
+!!!html5
+%html{ lang: "en" }
+  %head
+  %meta{ charset:"utf-8" }
+  %meta{ 'http-equiv' => "X-UA-Compatible", content: "IE=Edge,chrome=1" }
+  %meta{ name:"viewport", content:"width=device-width, initial-scale=1.0" }
+  %title LD32 Game
+  = javascript_include_tag "https://code.jquery.com/jquery-2.1.3.min.js"
+  /[if lt IE 9]
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"
+
+  %style{ type:'text/css' }= render '_font.css'
+
+  %body
+    %canvas.gamearea{ width: 900, height: 600 }
+  %script
+    = render 'config.js'
+    = render 'keylistener.js'
+    = render 'model.js'
+    = render 'player.js'
+    = render 'day.js'
+    = render 'calendar.js'
+    = render 'wallet.js'
+    = render 'team.js'
+    = render 'view.js'
+    = render 'action.js'
+    = render 'generator.js'
+    = render 'menu_state.js'
+    = render 'view_text.js'
+    = render 'main.js'
+
