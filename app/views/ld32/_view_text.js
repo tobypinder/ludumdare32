@@ -25,6 +25,12 @@ var GameViewText = {
     this.content[line]        = text
     this.displayContent[line] = ""
   },
+  changeLineImmediately:function(line, text)
+  {
+    this.content[line]        = text
+    this.displayContent[line] = text
+    this.parseLine(line)
+  },
   wipeScreen:function()
   {
     for(var i=0;i<this.lines;i++)
@@ -64,7 +70,7 @@ var GameViewText = {
       var startChar = ' '
       if(this.actions.indexOf(command) === this.currentAction )
       {
-        startChar = '>'
+        startChar = (Math.round(GameConfig.currentFrame / 5) % 4 != 0) ? '>' : ' '
       }
 
       cleanline = cleanline.replace('{'+ command +'}', startChar + command +' ')
@@ -196,11 +202,46 @@ var GameViewText = {
 
     for(var i=0;i<this.lines;i++)
     {
-
-      var flicker = Math.cos((GamePlayer.approvalRating / GamePlayer.maxApproval) * Math.PI / 2) * 15
+      var xOffset = 0;
+      var yOffset = 0;
+      var flicker = 0;
+      if(Attack.in_progress)
+      {
+        flicker = Math.pow(Math.cos((Attack.progress / Attack.maxProgress) * Math.PI / 2), 4) * 60
+      } else {
+        flicker = Math.cos((GamePlayer.approvalRating / GamePlayer.maxApproval) * Math.PI / 2) * 15
+      }
       var green = Math.floor(Math.random()*flicker) + 153;
       GameView.ctx.fillStyle="rgb(0,"+green+",0)";
-      GameView.ctx.fillText(this.displayContent[i], 24, 25 * i + 30 );
+
+      line = padString(this.displayContent[i], 70)
+
+
+      if(flicker > 20)
+      {
+        var roll = Math.random();
+        var chance = (flicker - 20) / 600
+        if(roll < chance)
+        {
+          xOffset = Math.round(Math.sin(Math.random() * 2 * Math.PI) * ((flicker - 20)/30))
+        }
+      }
+
+      if(flicker > 30)
+      {
+        for(var j=0;j<line.length;j++)
+        {
+          var chance = ((flicker - 30) / 70000);
+          var roll = Math.random();
+          if(roll < chance)
+          {
+            var newline = line.substr(0, j) + Generator.garbage_character() + line.substr(j + 1, line.length- 1 )
+            line = newline
+          }
+        }
+      }
+
+      GameView.ctx.fillText(line, 24 + xOffset, (25 * i) + 30 + yOffset );
     }
   },
   _replaceChar: function(string, index, character)

@@ -33,8 +33,6 @@ var GameDay = {
     GamePlayer.daysCompleted+= 1;
     GamePlayer.performBalanceChange();
 
-
-
     //Set Date
     GamePlayer.date = this.in_x_days(GamePlayer.date.valueOf(), 1);
 

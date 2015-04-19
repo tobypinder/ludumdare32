@@ -1,3 +1,4 @@
 var GameConfig = {
-  fps: 30
+  fps: 30,
+  currentFrame: 0
 }

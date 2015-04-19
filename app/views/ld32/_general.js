@@ -13,3 +13,13 @@ var padString = function(string, chars)
 
   return string
 }
+
+var rightPadString = function(string, chars)
+{
+  while(string.length < chars)
+  {
+    string = " " + string ;
+  }
+
+  return string
+}

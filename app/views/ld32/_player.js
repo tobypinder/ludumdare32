@@ -125,7 +125,7 @@ var GamePlayer = {
   performIncome:function()
   {
     //TODO
-    var income = (Math.sin(Math.random()) * this.totals.pwned.botnet) * 0.1
+    var income = (Math.sin(Math.random() * (Math.PI / 2)) * this.totals.pwned.botnet) * 0.1
 
     if(income > 0)
     {

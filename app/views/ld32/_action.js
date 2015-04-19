@@ -142,24 +142,48 @@ var GameAction = {
         case 'Proxy':
           // TODO: Chance
           GamePlayer.totals.pwned.proxies ++;
+          Attack.start(GamePlayer.targets[Targets.currentTarget])
+
           GamePlayer.targets.splice(Targets.currentTarget, 1)
-          this.resetTargetState();
         break;
         case 'Slave':
-          // TODO: Chance
           GamePlayer.totals.pwned.botnet ++;
+          Attack.start(GamePlayer.targets[Targets.currentTarget])
+
           GamePlayer.targets.splice(Targets.currentTarget, 1)
-          this.resetTargetState();
+          // TODO: Chance
         break;
+
+        case 'Exploit':
+          if(Attack.in_progress === true && GamePlayer.totals.exploits.standard > 0)
+          {
+            GamePlayer.totals.exploits.standard -= 1
+            Attack.progress += 20
+            Attack.renderActions();
+          }
+        break;
+
+        case 'ZeroDay':
+        if(Attack.in_progress === true && GamePlayer.totals.exploits.zeroday > 1)
+          {
+            GamePlayer.totals.exploits.zeroday -= 1
+            Attack.progress += 50
+            Attack.renderActions();
+          }
+        break;
+
         default:
           console.warn('Unknown Action on Target: ['+ name +']')
         break;
       }
     }
   },
-  resetTargetState:function()
+  resetTargetState:function(skipMenuState)
   {
-    GameMenuState.changeState('targets');
+    if(skipMenuState !== true)
+    {
+      GameMenuState.changeState('targets');
+    }
     Targets.currentPage = 0
     Targets.currentTarget = null
   },

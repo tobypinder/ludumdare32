@@ -9,6 +9,7 @@ var GameMain = {
   },
   frame:function()
   {
+    GameConfig.currentFrame++;
     GameView.frame();
   }
 

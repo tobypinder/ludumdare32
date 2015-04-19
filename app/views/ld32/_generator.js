@@ -13,7 +13,8 @@ var Generator = {
     'BLACK',
     'SPRAY',
     'RADIO',
-    'SMART'
+    'SMART',
+    'SAND'
   ],
   p2: [
     'FOX',
@@ -27,7 +28,16 @@ var Generator = {
     'LION',
     'SWORD',
     'SQUIRREL',
-    'SEED'
+    'SEED',
+    'STORM'
+  ],
+  attack: [
+    'Bypassing Firewall',
+    'Mapped Network Topology'
+  ],
+  defend: [
+    'Nullrouted Malicious IP range',
+    'IDS Detected Anomalous Access'
   ],
   member_refusal: [
     [
@@ -101,13 +111,14 @@ var Generator = {
       'Added it to the toolchain.'
     ],
     [
-      "Is there any reason we aren't using CVE-"+(Math.floor(Math.random() * 0x1000).toString(16))+"?"
+      "Is there any reason we aren't using CVE-"+(Math.floor(Math.random() * 0x10000).toString(16).toUpperCase())+"?"
     ],
     [
       "Please find attached malware sample. Utilises novel techniques for",
       'popping shells on hardened clients.'
     ],
   ],
+  garbage: "!£$%^&*:@~;'#/\\1234567890_-=+",
   team_member: function()
   {
     var name1 = this.p1[Math.floor(Math.random() * this.p1.length)]
@@ -131,6 +142,10 @@ var Generator = {
   {
     return this.day_nothing[Math.floor(Math.random() * this.day_nothing.length)]
   },
+  garbage_character: function()
+  {
+    return this.garbage[Math.floor(Math.random() * this.garbage.length)]
+  },
   message_new_pwn_target: function(target)
   {
     lines = this.new_pwn_target[Math.floor(Math.random() * this.new_pwn_target.length)]
@@ -145,8 +160,6 @@ var Generator = {
   {
     lines = this.generate_exploit[Math.floor(Math.random() * this.generate_exploit.length)]
     lines = lines.concat(['','1 Exploit Found.'])
-
-    console.log(lines)
 
     return lines
   },
@@ -200,6 +213,19 @@ var Generator = {
 
     return target_stats;
   },
+  get_attack: function(amt)
+  {
+    var str = this.attack[Math.floor(Math.random() * this.attack.length)]
+    str = "  ["+ rightPadString((amt * 2).toFixed(2), 6) + "%]" + str
+    return str;
+  },
+  get_defend: function(amt)
+  {
+    var str = this.defend[Math.floor(Math.random() * this.defend.length)]
+    str = rightPadString(str, 60) + "["+ rightPadString((amt * 2).toFixed(2), 6) + "%]"
+    return str;
+  },
+
 
   get_total_skills: function()
   {
