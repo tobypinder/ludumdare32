@@ -14,7 +14,9 @@ var Generator = {
     'SPRAY',
     'RADIO',
     'SMART',
-    'SAND'
+    'SAND',
+    'CYBER',
+    'POV',
   ],
   p2: [
     'FOX',
@@ -29,7 +31,9 @@ var Generator = {
     'SWORD',
     'SQUIRREL',
     'SEED',
-    'STORM'
+    'STORM',
+    'COMMANDO',
+    'DARE'
   ],
   attack: [
     'Bypassing Firewall',
@@ -111,12 +115,34 @@ var Generator = {
       'Added it to the toolchain.'
     ],
     [
-      "Is there any reason we aren't using CVE-"+(Math.floor(Math.random() * 0x10000).toString(16).toUpperCase())+"?"
+      "Message >> VALID SIG",
+      "Is there any reason we aren't using CVE-"+(Math.floor(Math.random() * 0x10000).toString(16).toUpperCase())+"?",
+      ">> EOF"
     ],
     [
       "Please find attached malware sample. Utilises novel techniques for",
       'popping shells on hardened clients.'
     ],
+  ],
+  win_proxy: [
+    [
+      'Host Compromise Success.',
+      'OnionRouting.exe deploy: [ OK ]'
+    ],
+    [
+      'Host Compromise Success.',
+      'OnionRouting.exe deploy: [ OK ]'
+    ]
+  ],
+  win_botnet: [
+    [
+      'Root Access Granted',
+      'Command and Control server received Ping.'
+    ],
+    [
+      'Root Access Granted',
+      'Command and Control server received Ping.'
+    ]
   ],
   garbage: "!£$%^&*:@~;'#/\\1234567890_-=+",
   team_member: function()
@@ -158,10 +184,20 @@ var Generator = {
   },
   message_generate_exploit: function()
   {
-    lines = this.generate_exploit[Math.floor(Math.random() * this.generate_exploit.length)]
+    lines =   this.generate_exploit[Math.floor(Math.random() * this.generate_exploit.length)]
     lines = lines.concat(['','1 Exploit Found.'])
 
     return lines
+  },
+  message_win_botnet: function()
+  {
+    var msg = this.win_botnet[Math.floor(Math.random() * this.win_botnet.length)]
+    return msg.concat(['', 'Node added to botnet.'])
+  },
+  message_win_proxy: function()
+  {
+    var msg = this.win_proxy[Math.floor(Math.random() * this.win_proxy.length)]
+    return msg.concat(['', 'Node added to proxy array.'])
   },
   member_stats: function(member)
   {
@@ -216,13 +252,13 @@ var Generator = {
   get_attack: function(amt)
   {
     var str = this.attack[Math.floor(Math.random() * this.attack.length)]
-    str = "  ["+ rightPadString((amt * 2).toFixed(2), 6) + "%]" + str
+    str = "  ["+ rightPadString((amt * 2).toFixed(2), 6) + "%] " + str
     return str;
   },
   get_defend: function(amt)
   {
     var str = this.defend[Math.floor(Math.random() * this.defend.length)]
-    str = rightPadString(str, 60) + "["+ rightPadString((amt * 2).toFixed(2), 6) + "%]"
+    str = rightPadString(str, 59) + " ["+ rightPadString((amt * 2).toFixed(2), 6) + "%]"
     return str;
   },
 

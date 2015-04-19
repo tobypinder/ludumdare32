@@ -141,14 +141,13 @@ var GameAction = {
 
         case 'Proxy':
           // TODO: Chance
-          GamePlayer.totals.pwned.proxies ++;
-          Attack.start(GamePlayer.targets[Targets.currentTarget])
+
+          Attack.start(GamePlayer.targets[Targets.currentTarget], 'proxy')
 
           GamePlayer.targets.splice(Targets.currentTarget, 1)
         break;
         case 'Slave':
-          GamePlayer.totals.pwned.botnet ++;
-          Attack.start(GamePlayer.targets[Targets.currentTarget])
+          Attack.start(GamePlayer.targets[Targets.currentTarget], 'botnet')
 
           GamePlayer.targets.splice(Targets.currentTarget, 1)
           // TODO: Chance

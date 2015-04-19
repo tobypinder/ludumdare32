@@ -3,11 +3,13 @@ var Attack = {
   maxProgress: 50,
   target: null,
   in_progress: false,
+  attack_type: '',
   stepInterval: null,
   log: [],
-  start:function(target)
+  start:function(target, type)
   {
-    this.target = target
+    this.target      = target
+    this.attack_type = type
 
     GameAction.resetTargetState(true);
     GameViewText.wipeScreen()
@@ -29,7 +31,7 @@ var Attack = {
   },
   modifyProgress:function()
   {
-    var multiplier = 10 * Math.pow(0.9, (GamePlayer.daysCompleted / 7))
+    var multiplier = 1 * Math.pow(0.9, (GamePlayer.daysCompleted / 7))
     var roll = Math.random()
 
     if(roll <= 0.1)
@@ -79,12 +81,98 @@ var Attack = {
   },
   win:function()
   {
+
+    var event_text = []
+
+    switch(this.attack_type)
+    {
+      case 'proxy':
+        GamePlayer.totals.pwned.proxies++;
+        event_text = Generator.message_win_proxy();
+      break;
+      case 'botnet':
+        GamePlayer.totals.pwned.botnet++;
+        event_text = Generator.message_win_botnet();
+      break;
+    }
+
     //Add win event to queue.
+    event = {
+      text: event_text,
+      actions: {
+        'Disconnect': function(){
+          GameMenuState.changeState('day')
+        }
+      }
+    }
+    GameDay.events.push(event);
+
     this.finish();
   },
   lose:function()
   {
+    var rollTarget = (GamePlayer.totals.stats.deniability() - this.target.stats.attribution) + 10 * Math.sin(Math.random() * 2 * Math.PI)
+    rollTarget = Math.min(rollTarget, 100);
+    rollTarget = Math.max(rollTarget, 0);
+
+    var roll = Math.random();
+
+    barTarget = Math.round(rollTarget / 2);
+    barRoll   = Math.round(roll * 50)
+
+    var b1 = '           ['
+    b1 += Array(barTarget + 1).join("X")
+    b1 += Array((50 - barTarget) + 1).join(".")
+    b1 += "]  "
+
+    var b2 = '           ['
+    b2 += Array(barRoll + 1).join("X")
+    b2 += Array((50 - barRoll) + 1).join(".")
+    b2 += "]  "
+
+    var avoided = barRoll < barTarget;
+    var result = ''
+
+    if(avoided)
+    {
+      result = ['Avoided all traces of attribution.']
+    } else {
+
+      var approval_loss = Math.round(Math.random() * 6) + 7
+      GamePlayer.approvalRating -= approval_loss
+
+      result = [
+        '[ALARM] Indicators of Compromise linked to this facility.',
+        '',
+        (approval_loss * 2) + '% approval rating lost.'
+      ]
+    }
+
+    failure_text = [
+      '[ACCESS DENIED]',
+      'Hostile system successfully applied countermeasures.',
+      'Hiding Traces of activities. ',
+      '',
+      '127.0.0.1: ',
+      b1,
+      this.target.ip+": ",
+      b2,
+      '',
+    ].concat(result)
+
+
+
     //Add lose event to queue
+    event = {
+      text: failure_text,
+      actions: {
+        'Disconnect': function() {
+          GameMenuState.changeState('day')
+        }
+      }
+    }
+    GameDay.events.push(event);
+
     this.finish();
   },
   finish:function()
@@ -94,6 +182,7 @@ var Attack = {
     this.target       = null;
     this.progress     = 25;
     this.log          = [];
+    this.attack_type  = '';
     //Kick user back into main application flow.
     GameMenuState.changeState('day')
   }

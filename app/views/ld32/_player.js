@@ -22,35 +22,35 @@ var GamePlayer = {
         GamePlayer.team.forEach(function(member){
           total += member.skills.attribution
         })
-        return total
+        return total + 5
       }, //
       scanning: function() {
         var total = 0
         GamePlayer.team.forEach(function(member){
           total += member.skills.scanning
         })
-        return total
+        return total + 5
       },
       exploitation: function() {
         var total = 0
         GamePlayer.team.forEach(function(member){
           total += member.skills.exploitation
         })
-        return total
+        return total + 5
       },
       pwnage: function() {
         var total = 0
         GamePlayer.team.forEach(function(member){
           total += member.skills.pwnage
         })
-        return total
+        return total + 5
       },
     },
     stats: {
       deniability: function()
       {
         //TODO: Better function of available proxies and skill of team.
-        return Math.pow(GamePlayer.totals.pwned.proxies + 1, 0.3) * (1 + Math.pow(GamePlayer.totals.skills.attribution(), 0.3))
+        return Math.pow(GamePlayer.totals.pwned.proxies + 1, 0.3) * (1 + Math.pow(GamePlayer.totals.skills.attribution(), 0.3)) + 70
       }
     }
   },

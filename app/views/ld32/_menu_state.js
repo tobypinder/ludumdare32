@@ -102,7 +102,7 @@ var GameMenuState = {
     GameViewText.changeLine(0, "Good. Here's your stipend. Get recruiting, build your team, and")
     GameViewText.changeLine(1, "stockpile vulnerabilities. We need you operational ASAP.")
 
-    this.addBTCLine(7, 5, 'Departmental Seed Capital.')
+    this.addBTCLine(7, 3, 'Departmental Seed Capital.')
     GameViewText.changeLine(11, "{ACCEPT}")
     GameViewText.footer()
   },
