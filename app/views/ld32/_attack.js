@@ -2,13 +2,15 @@ var Attack = {
   progress: 25,
   maxProgress: 50,
   target: null,
+  target_idx:-1,
   in_progress: false,
   attack_type: '',
   stepInterval: null,
   log: [],
-  start:function(target, type)
+  start:function(target_idx, type)
   {
-    this.target      = target
+    this.target_idx  = target_idx
+    this.target      = GamePlayer.targets[target_idx]
     this.attack_type = type
 
     GameAction.resetTargetState(true);
@@ -106,6 +108,8 @@ var Attack = {
       }
     }
     GameDay.events.push(event);
+    // Remove target
+    GamePlayer.targets.splice(this.target_idx, 1)
 
     this.finish();
   },
@@ -180,6 +184,7 @@ var Attack = {
     clearInterval(Attack.stepInterval)
     this.in_progress  = false;
     this.target       = null;
+    this.target_idx   = -1;
     this.progress     = 25;
     this.log          = [];
     this.attack_type  = '';

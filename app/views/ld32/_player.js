@@ -49,8 +49,8 @@ var GamePlayer = {
     stats: {
       deniability: function()
       {
-        //TODO: Better function of available proxies and skill of team.
-        return Math.pow(GamePlayer.totals.pwned.proxies + 1, 0.3) * (1 + Math.pow(GamePlayer.totals.skills.attribution(), 0.3)) + 70
+        // TODO: Better function of available proxies and skill of team.
+        return Math.pow((GamePlayer.totals.pwned.proxies) * 10, 0.7) * (1 + Math.pow(GamePlayer.totals.skills.attribution()*10, 0.4)) + 20
       }
     }
   },
@@ -76,16 +76,25 @@ var GamePlayer = {
       ip: ip ,
       type: type,
       stats: {
-        attribution: 5, // % to be detected on failure
-        scannability: 1,
-        exploitability: 1,
-        pwnability: 1
+        attribution:    this.generateStat(2, 3, 0.011, 0.55, 3), // % to be detected on failure
+        scannability:   this.generateStat(2, 3, 0.011, 1, 3),
+        exploitability: this.generateStat(2, 3, 0.011, 1, 3),
+        pwnability:     this.generateStat(2, 3, 0.011, 1, 3)
       }
     }
   },
   generateStat:function(multiplier, addition, day_multiplier, day_power, digits) {
     var base = Math.cos(Math.random() * Math.PI) * multiplier + addition
     var days = Math.pow((Math.random() * (this.daysCompleted + 1 ) * day_multiplier), day_power)
+
+    var roll = Math.random();
+
+    if(roll < 0.1)
+    {
+      var multiplier = (1 + Math.random())
+      base = base * multiplier
+      day  = day  * multiplier
+    }
 
     return roundStat((base + days), digits)
   },

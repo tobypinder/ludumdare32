@@ -14,11 +14,9 @@ var Targets = {
 
       for(var i=0; i<count; i++)
       {
-        var ip   = padString(entries[i+o].ip, 20)
-        var type = padString(entries[i+o].type, 15)
+        var ip = padString(entries[i + o].ip, 20)
 
-        GameViewText.changeLine(6 + i, ip + "   " + type + " {Inspect#"+(i+o)+"}")
-
+        GameViewText.changeLine(6 + i, ip + "       {Inspect#"+(i+o)+"}")
 
       }
 

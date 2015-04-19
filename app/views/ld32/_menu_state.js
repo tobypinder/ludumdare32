@@ -42,7 +42,7 @@ var GameMenuState = {
       break;
 
       default:
-      console.warn('Unhandled state: ['+this.currentState+'] ')
+        console.warn('Unhandled state: ['+this.currentState+'] ')
       break;
     }
   },

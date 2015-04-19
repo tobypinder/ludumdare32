@@ -141,15 +141,10 @@ var GameAction = {
 
         case 'Proxy':
           // TODO: Chance
-
-          Attack.start(GamePlayer.targets[Targets.currentTarget], 'proxy')
-
-          GamePlayer.targets.splice(Targets.currentTarget, 1)
+          Attack.start(Targets.currentTarget, 'proxy')
         break;
         case 'Slave':
-          Attack.start(GamePlayer.targets[Targets.currentTarget], 'botnet')
-
-          GamePlayer.targets.splice(Targets.currentTarget, 1)
+          Attack.start(Targets.currentTarget, 'botnet')
           // TODO: Chance
         break;
 
@@ -166,7 +161,7 @@ var GameAction = {
         if(Attack.in_progress === true && GamePlayer.totals.exploits.zeroday > 1)
           {
             GamePlayer.totals.exploits.zeroday -= 1
-            Attack.progress += 50
+            Attack.progress += 50 // Instant Win.
             Attack.renderActions();
           }
         break;

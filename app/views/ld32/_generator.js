@@ -33,7 +33,8 @@ var Generator = {
     'SEED',
     'STORM',
     'COMMANDO',
-    'DARE'
+    'DARE',
+    'CAT'
   ],
   attack: [
     'Bypassing Firewall',

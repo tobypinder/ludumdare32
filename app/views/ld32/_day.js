@@ -151,7 +151,7 @@ var GameDay = {
     var added_chance = (GamePlayer.totals.skills.scanning() / 20) - (GamePlayer.daysCompleted / 70)
 
     added_chance = Math.max(added_chance, 0)
-    var chance = this.goodEventChance(0.2, 0.5 , 0.1) + added_chance
+    var chance = this.goodEventChance(0.2, 0.5, 0.1) + added_chance
     var roll   = Math.random()
     //
 
