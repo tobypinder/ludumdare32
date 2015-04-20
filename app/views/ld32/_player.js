@@ -3,6 +3,7 @@ var GamePlayer = {
   maxApproval: 50,
   date: new Date(1970, 3, 1),
   daysCompleted: 0,
+  gameover: false,
   team: [],
   targets: [],
   balanceSheet: [],

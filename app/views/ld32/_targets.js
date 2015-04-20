@@ -1,7 +1,7 @@
 var Targets = {
   currentPage: 0,
   currentTarget: null,
-  types: ['PWN', 'EXPLOIT'],
+  types: ['PWN', 'HIT'],
   renderTargets: function(){
     var entries = GamePlayer.targets
 
@@ -64,6 +64,10 @@ var Targets = {
         GameViewText.changeLine(15, 'Pwn machine and convert to:')
         GameViewText.changeLine(16, '  {Proxy} - Add to proxy network. Increases anonymisation.')
         GameViewText.changeLine(17, '  {Slave} - Add to botnet. Increases income.')
+      break;
+      case 'HIT':
+        GameViewText.changeLine(15, 'Take Down Host')
+        GameViewText.changeLine(16, '  {Takedown}')
       break;
     }
   }

@@ -36,12 +36,12 @@ var Attack = {
     var multiplier = 1 * Math.pow(0.9, (GamePlayer.daysCompleted / 7))
     var roll = Math.random()
 
-    if(roll <= 0.1)
+    if(roll <= 0.125)
     {
       var amount = multiplier * Math.random() * GamePlayer.totals.skills.pwnage();
       this.log.unshift(Generator.get_attack(amount));
       this.progress += amount;
-    } else if(roll <= 0.2) {
+    } else if(roll <= 0.25) {
       var amount = multiplier * Math.random() * this.target.stats.pwnability;
       this.log.unshift(Generator.get_defend(amount));
       this.progress -= amount;
@@ -95,6 +95,11 @@ var Attack = {
       case 'botnet':
         GamePlayer.totals.pwned.botnet++;
         event_text = Generator.message_win_botnet();
+      break;
+      case 'takedown':
+        // TODO: Find matching event and trigger
+        // via reverse IP lookup!
+        event_text = Generator.message_win_takedown();
       break;
     }
 

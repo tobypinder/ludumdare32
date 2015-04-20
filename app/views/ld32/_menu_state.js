@@ -51,48 +51,63 @@ var GameMenuState = {
     this.currentState = state
     this.applyCurrentState()
   },
+  applyLogo:function()
+  {
+    GameViewText.changeLine(0,'     ___    ____  ______                                      ')
+    GameViewText.changeLine(1,'    /   |  / __ \\/_  __/  Advanced                            ')
+    GameViewText.changeLine(2,'   / /| | / /_/ / / /       Persistent      a game for LD32   ')
+    GameViewText.changeLine(3,'  / ___ |/ ____/ / /          Threat          by @tobypinder  ')
+    GameViewText.changeLine(4,' /_/  |_/_/     /_/                                           ')
+  },
   applyMain: function()
   {
-    GameViewText.changeLine(0, "v0.0.5 APT Management Console.")
-    GameViewText.changeLine(1, "Establishing Secure Connection Protocols               [ OK ]")
-    GameViewText.changeLine(2, "Connecting to MILCOM Network                           [ OK ]")
-    GameViewText.changeLine(3, "")
-    GameViewText.changeLine(4, "Message found >>> PUBKEY matches fingerprint ")
-    GameViewText.changeLine(5, "From: Cloaked/09f911029d/")
-    GameViewText.changeLine(5, "---")
-    GameViewText.changeLine(6, "Congrats on the congressional funding. But it's time now.")
-    GameViewText.changeLine(7, "We need you to form a department, train operatives, and")
-    GameViewText.changeLine(8, "become operational. We have plans for China, Russia, Iran...")
-    GameViewText.changeLine(9, "Don't let me down.")
+    this.applyLogo();
 
-    GameViewText.changeLine(11, "{ACCEPT}")
-    GameViewText.changeLine(12, "{REJECT}")
+    GameViewText.changeLine(6, "Establishing Secure Connection Protocols               [ OK ]")
+    GameViewText.changeLine(7, "Connecting to MILCOM Network                           [ OK ]")
+    GameViewText.changeLine(8, "")
+    GameViewText.changeLine(9, "Message found >>> PUBKEY matches fingerprint ")
+    GameViewText.changeLine(10, "From: Cloaked/09f911029d/")
+    GameViewText.changeLine(11, "---")
+    GameViewText.changeLine(12, "Congrats on the congressional funding. But it's time now.")
+    GameViewText.changeLine(13, "We need you to form a department, train operatives, and")
+    GameViewText.changeLine(14, "become operational. We have plans for China, Russia, Iran...")
+    GameViewText.changeLine(15, "Don't let me down.")
 
-    GameViewText.changeLine(22, "[^v<>] Navigate   [Ent] Accept  [ ] Expedite Terminal Redraw ")
+    GameViewText.changeLine(18, "{ACCEPT}")
+    GameViewText.changeLine(19, "{REJECT}")
+
+    GameViewText.changeLine(22, "[^v<>] Navigate Caret  [Ent] Accept  [Space] Faster Terminal")
   },
   applyRejectMain: function()
   {
     GameViewText.wipeScreen()
-    GameViewText.changeLine(0, "Message found >>> PUBKEY matches fingerprint ")
-    GameViewText.changeLine(1, "---")
-    GameViewText.changeLine(2, "You're rejecting? I don't have time for insubordination.")
-    GameViewText.changeLine(3, "After all we worked for... What, you think you can pull a Snowden?")
-    GameViewText.changeLine(4, "Fat chance.")
+    this.applyLogo();
+
+    GameViewText.changeLine(6, "Message found >>> PUBKEY matches fingerprint ")
+    GameViewText.changeLine(7, "---")
+    GameViewText.changeLine(8, "You're rejecting? I don't have time for insubordination.")
+    GameViewText.changeLine(9, "After all we worked for... What, you think you can pull a Snowden?")
+    GameViewText.changeLine(10, "Fat chance.")
 
     GameViewText.changeLine(20, "Terminal Access Rights Revoked. Data expunged.")
+    GamePlayer.gameover = true
   },
 
   applyGameOverApproval: function()
   {
     GameViewText.wipeScreen()
-    GameViewText.changeLine(0, "Message found >>> PUBKEY matches fingerprint ")
-    GameViewText.changeLine(1, "---")
-    GameViewText.changeLine(2, "Your performance has been deemed unsatisfactory by the council.")
-    GameViewText.changeLine(3, "Consider your employment terminated immediately.")
+    this.applyLogo();
+
+    GameViewText.changeLine(6, "Message found >>> PUBKEY matches fingerprint ")
+    GameViewText.changeLine(7, "---")
+    GameViewText.changeLine(8, "Your performance has been deemed unsatisfactory by the council.")
+    GameViewText.changeLine(9, "Consider your employment terminated immediately.")
 
     GameViewText.changeLine(17, "Employment Length: "+ GamePlayer.daysCompleted +" days")
 
     GameViewText.changeLine(20, "Terminal Access Rights Revoked. Data expunged.")
+    GamePlayer.gameover = true
   },
   applyAcceptMain: function()
   {

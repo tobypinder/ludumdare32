@@ -9,10 +9,7 @@ XXXXXXXXXXXXXXXXXXXXXXX
   * Better/Balanced Scaling/Levelling
 * Features of Main Gameplay
   * IDEA: Use calendar for defensive events (other states locking on?)
-* Features of Other Gameplay
-  * Fire team members
-* Event
-  * Can tie to target.ip. If battle is lost, an alternative event may trigger.
+
 
 Probably Cut:
 * Sound Effects
@@ -20,5 +17,8 @@ Probably Cut:
 * Attribution to increase freq. of Attribution Events
   * These are large bump to approval rating
   * increased recruitment for next month (scheduled recruitment opportunities)
-
 * Different Hack task types.
+* Fire team members
+
+* Future Exp
+"Juice" battle UI using the GameOver wiggle.

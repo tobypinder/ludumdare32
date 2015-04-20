@@ -4,10 +4,10 @@ var GameDay = {
     // {text:, actions:}
   ],
   calendar: [
-    // future events: { date:, event: }
+    // future events: { date:, event:, visibility:  }
   ],
   displayDate: function(date){
-    month = date.getMonth()+''
+    month = (date.getMonth()+1)+''
     if(month.length == 1)
     {
       month = ' ' + month
@@ -88,16 +88,88 @@ var GameDay = {
     });
   },
 
-  goodEventChance:function(always, perc, dep)
+  // EVENT GENERATION
+
+  goodEventChance:function(constant, chance, depreciation)
   {
-    return (perc * Math.pow(1-perc, dep * GamePlayer.daysCompleted)) + always
+    var value = constant + chance * Math.pow(1- depreciation, GamePlayer.daysCompleted);
+    return value;
   },
   seedRandom:function()
   {
     this.seedRandomMemberEvent();
     this.seedRandomPwnTargetEvent();
     this.seedRandomGenerateExploitEvent();
+    this.seedRandomBuyZeroDayEvent();
+    this.seedRandomCalendarTargetEvent();
+    this.seedRandomExploitInvestEvent();
+
+
     this.seedRandomDay();
+  },
+  seedRandomExploitInvestEvent:function()
+  {
+    var chance = 0.02;
+    var roll   = Math.random();
+    if(roll <= chance)
+    {
+      var price = roundStat(0.2 + Math.random() * 0.2, 8)
+
+      this.events.push({
+        text: [
+          'Funding Request: Reverse Engineering',
+          'Source: Unknown advanced sample found',
+          '   on highrisk target',
+          'Amount: '+price.toFixed(8)+" BTC",
+          '',
+          'Approve?'
+        ],
+        actions: {
+          'Yes': function()
+          {
+            if(GamePlayer.totals.btc > price)
+            {
+              GamePlayer.totals.btc -= price
+              GamePlayer.balanceSheet.push([GamePlayer.date, 'Research Investment', -price])
+
+              // Add research fruition.
+              for(var x=0; x<3; x++)
+              {
+                var date = GameDay.in_x_days(GamePlayer.date, (Math.random()*2+5)*(x+1))
+                var maturity = {
+                  text: [
+                    'Malware research yielded usable results.',
+                    '',
+                    '1 Exploit Added.'
+                  ],
+                  actions: {
+                    'OK': function(){
+                      GamePlayer.totals.exploits.standard++;
+                    }
+                  }
+                }
+
+                GameDay.calendar.push({date: date, event: maturity, visibility: false} )
+              }
+
+              var tx = {
+                text: ['Funds allocated.','','Removed '+price.toFixed(8)+" BTC"],
+                actions: {
+                  'OK': function(){}
+                }
+              }
+
+              GameDay.events.push(tx)
+            }
+          },
+          'No': function()
+          {
+
+          }
+        }
+      });
+
+    }
   },
   seedRandomDay:function()
   {
@@ -108,13 +180,92 @@ var GameDay = {
       }
     }
   },
+  seedRandomCalendarTargetEvent:function()
+  {
+    var chance = 0.08;
+    var roll   = Math.random();
+    //
+
+    if(roll <= chance)
+    {
+      var day = this.in_x_days(GamePlayer.date, Math.round(Math.random() * 5) + 5);
+      var target = GamePlayer.generateTarget('HIT');
+
+      var event = {
+        text: Generator.message_new_calendar_target(target, day),
+        actions: {
+          'OK': function()
+          {
+            GamePlayer.targets.push(target);
+
+            var calendar_event = {
+              name: 'Takedown ' + target.ip + ' before' + GameDay.displayDate(day),
+              text: Generator.message_check_calendar_target(target, day),
+              actions: {
+                'More': function()
+                {
+                  var ips = GamePlayer.targets.map(function(t){ return t.ip })
+                  var found = ips.indexOf(target.ip) !== -1;
+                  if (found) {
+                    GameDay.spawnCalendarEventFailure(target)
+                  } else {
+                    GameDay.spawnCalendarEventSuccess(target)
+                  }
+                }
+              }
+            }
+
+            GameDay.calendar.splice(1, 0, {
+              date: day,
+              event: calendar_event,
+              visibility: true
+            });
+          }
+        }
+      }
+
+      GameDay.events.push(event)
+    }
+  },
+  spawnCalendarEventSuccess:function(target)
+  {
+    var approvalGain = (Math.round(Math.random()*3) + 2)
+    var event = {
+      text: Generator.message_takedown_success(approvalGain),
+      actions: {
+        'Continue': function(){
+          GamePlayer.approvalRating += approvalGain
+        }
+      }
+    }
+    GameDay.events.splice(1, 0, event)
+  },
+  spawnCalendarEventFailure:function(target)
+  {
+    var approvalLoss = (Math.round(Math.random()*3) + 8)
+
+    var event = {
+      text: Generator.message_takedown_failure(approvalLoss),
+      actions: {
+        'Continue': function(){
+          GamePlayer.approvalRating -= approvalLoss
+
+          var ips = GamePlayer.targets.map(function(t){ return t.ip })
+
+          GamePlayer.targets.splice(ips.indexOf(target.ip), 1)
+        }
+      }
+    }
+    GameDay.events.splice(1, 0, event)
+  },
   seedRandomGenerateExploitEvent:function()
   {
     // CHANCE
-    var added_chance = (GamePlayer.totals.skills.exploitation() / 20) - (GamePlayer.daysCompleted / 70)
+    var added_chance = (GamePlayer.totals.skills.exploitation() / 100) - (GamePlayer.daysCompleted / 1000)
 
     added_chance = Math.max(added_chance, 0)
-    var chance = this.goodEventChance(0.4, 0.5, 0.1) + added_chance
+
+    var chance = this.goodEventChance(0.01, 0.05, 0.05) + added_chance
     var roll   = Math.random()
     //
 
@@ -133,10 +284,53 @@ var GameDay = {
       GameDay.events.push(event)
     }
   },
+  seedRandomBuyZeroDayEvent:function()
+  {
+    // CHANCE
+    var chance = this.goodEventChance(0.01, 0.05, 0.08)
+    var roll   = Math.random()
+
+    if(roll <= chance)
+    {
+      var price = 1 + (Math.random() / 5) * (1 + (GamePlayer.daysCompleted / 30))
+
+      var event = {
+        text: Generator.message_buy_zeroday(price),
+        actions: {
+          'Yes': function()
+          {
+            if(GamePlayer.totals.btc > price)
+            {
+              GamePlayer.totals.exploits.zeroday += 1
+              GamePlayer.totals.btc -= price
+              GamePlayer.balanceSheet.push([GamePlayer.date, 'Purchased Zeroday', -price])
+
+              var tx = {
+                text: [
+                  'Added 1 Zeroday Exploit',
+                  'Removed '+price.toFixed(8)+" BTC"],
+                actions: {
+                  'OK': function(){}
+                }
+              }
+
+              GameDay.events.push(tx)
+            }
+          },
+          'No': function()
+          {
+
+          }
+        }
+      }
+
+      GameDay.events.push(event)
+    }
+  },
   seedRandomMemberEvent:function()
   {
     // CHANCE
-    chance = this.goodEventChance(0.1, 0.05, 0.1)
+    chance = this.goodEventChance(0.03, 0.07, 0.05)
     roll   = Math.random()
     //
 
@@ -148,10 +342,10 @@ var GameDay = {
   seedRandomPwnTargetEvent:function()
   {
     // CHANCE
-    var added_chance = (GamePlayer.totals.skills.scanning() / 20) - (GamePlayer.daysCompleted / 70)
+    var added_chance = (GamePlayer.totals.skills.scanning() / 100) - (GamePlayer.daysCompleted / 1000)
 
     added_chance = Math.max(added_chance, 0)
-    var chance = this.goodEventChance(0.2, 0.5, 0.1) + added_chance
+    var chance = this.goodEventChance(0.025, 0.2, 0.05) + added_chance
     var roll   = Math.random()
     //
 
@@ -182,20 +376,9 @@ var GameDay = {
         'Awaiting further instructions.'
       ].concat(Generator.member_stats(member))
     )
-
-    //TODO: Remove
-    // this.addEventToCalendar(
-    //   this.in_x_days(GamePlayer.date, 3),
-    //   {
-    //     name: 'Hello',
-    //     text: ['Oopsie doopsie!'],
-    //     actions: {
-    //       'OK?': function(){}
-    //     }
-    //   },
-    //   true // false
-    // )
   },
+
+  // EVENT GENERATION END
 
   getMemberOffer:function(member, text, text_accept, text_reject)
   {
@@ -235,12 +418,18 @@ var GameDay = {
     this.calendar.push({date: date, event: event, visibility: visibility})
   },
   addEventsFromCalendar:function() {
+    var new_calendar = []
+
     this.calendar.forEach(function(entry) {
       if(entry.date.valueOf() == GamePlayer.date.valueOf())
       {
         GameDay.events.push(entry.event)
+      } else {
+        new_calendar.push(entry)
       }
     });
+
+    this.calendar = new_calendar;
   },
 
   seedBailoutEvent:function()

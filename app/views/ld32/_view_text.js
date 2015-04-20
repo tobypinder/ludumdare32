@@ -2,7 +2,7 @@ var GameViewText = {
   lines: 23,
   cursorX: 0,
   cursorY: 0,
-
+  flicker: 0,
   content: [],
   displayContent: [],
   actions: [],
@@ -204,34 +204,43 @@ var GameViewText = {
     {
       var xOffset = 0;
       var yOffset = 0;
-      var flicker = 0;
-      if(Attack.in_progress)
+      if(GamePlayer.gameover !== false)
       {
-        flicker = Math.pow(Math.cos((Attack.progress / Attack.maxProgress) * Math.PI / 2), 4) * 60
-      } else {
-        flicker = Math.cos((GamePlayer.approvalRating / GamePlayer.maxApproval) * Math.PI / 2) * 15
+        this.flicker += 0.01
       }
-      var green = Math.floor(Math.random()*flicker) + 153;
+      else if(Attack.in_progress)
+      {
+        this.flicker = Math.pow(Math.cos((Attack.progress / Attack.maxProgress) * Math.PI / 2), 4) * 60
+      } else {
+        this.flicker = Math.cos((GamePlayer.approvalRating / GamePlayer.maxApproval) * Math.PI / 2) * 15
+      }
+      var green = Math.floor(Math.random() * this.flicker) + 153;
       GameView.ctx.fillStyle="rgb(0,"+green+",0)";
 
       line = padString(this.displayContent[i], 70)
 
 
-      if(flicker > 20)
+      if(this.flicker > 20)
       {
         var roll = Math.random();
-        var chance = (flicker - 20) / 600
+        var chance = (this.flicker - 20) / 600
         if(roll < chance)
         {
-          xOffset = Math.round(Math.sin(Math.random() * 2 * Math.PI) * ((flicker - 20)/30))
+          xOffset = Math.round(Math.sin(Math.random() * 2 * Math.PI) * ((this.flicker - 20)/30))
         }
       }
 
-      if(flicker > 30)
+      if(this.flicker > 30)
       {
         for(var j=0;j<line.length;j++)
         {
-          var chance = ((flicker - 30) / 70000);
+          var chance = 0
+          if(GamePlayer.gameover !== false)
+          {
+            chance = ((this.flicker - 30) / (70000 / this.flicker));
+          } else {
+            chance = ((this.flicker - 30) / 70000);
+          }
           var roll = Math.random();
           if(roll < chance)
           {

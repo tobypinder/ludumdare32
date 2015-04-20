@@ -38,11 +38,19 @@ var Generator = {
   ],
   attack: [
     'Bypassing Firewall',
-    'Mapped Network Topology'
+    'Mapped Network Topology',
+    'Attack Surface Identified',
+    'Port Knocking Circumvented',
+    'Authentication Downgrade',
+    'MitM Activated'
   ],
   defend: [
     'Nullrouted Malicious IP range',
-    'IDS Detected Anomalous Access'
+    'IDS Detected Anomalous Access',
+    'Address Space Randomized',
+    'PKI Keys Revoked',
+    'Passwords Changed',
+    'Honeypot Tripwire Activated'
   ],
   member_refusal: [
     [
@@ -55,6 +63,9 @@ var Generator = {
     [
       'Your loss.'
     ],
+    [
+      'The corporate world holds plenty of opportunity anyway.'
+    ],
   ],
   member_accept: [
     [
@@ -66,6 +77,9 @@ var Generator = {
     [
       'Fascinating...'
     ],
+    [
+      "I'll begin right away."
+    ]
   ],
   member_offer: [
     [
@@ -73,7 +87,7 @@ var Generator = {
       'going on...'
     ],
     [
-      'You need someone with my 1337 skillz.',
+      'You need someone with my 1337 skillz?',
     ],
     [
       'You need root? I can get it.',
@@ -84,7 +98,14 @@ var Generator = {
     [
       "What I do have are a very particular set of skills, skills I",
       "have acquired over a very long career."
-    ]
+    ],
+    [
+      "If you're building a red team, I want in."
+    ],
+    [
+      "You must have seen some of my work. You wouldn't know it, ",
+      "though..."
+    ],
   ],
   day_nothing: [
     [
@@ -99,6 +120,76 @@ var Generator = {
     [
       'System nominal.'
     ],
+    [
+      'Network Status: 200'
+    ],
+    [
+      'User input required.'
+    ],
+
+  ],
+  new_calendar_target: [
+    [
+      'We need %ip% to respond to C&C pings by %date%.',
+      'Make it happen.',
+      '## SIGCHECK: OK. HASH 09F91102 ##'
+    ],
+    [
+      'We used to have presence on %ip% but they took us out.',
+      'It is critical that we have access before %date%.'
+    ],
+    [
+      'IP: %ip%',
+      'Expiry: %date%.',
+      'Requested Action: Make unavailable by all means necessary.',
+    ]
+  ],
+  check_calendar_target: [
+    [
+      'From: 3567/APRA-1234 <<',
+      'Requesting verification of %ip% takedown.',
+      '>> '
+    ],
+    [
+      '<<C&C Daemon>> PING %ip%'
+    ],
+    [
+      'Verifying unavailability of undesirable services',
+      'from %ip%...'
+    ]
+    [
+      'Target %ip% availability status...'
+    ]
+  ],
+  takedown_success: [
+    [
+      '404 - System no longer responding to requests'
+    ],
+    [
+      'All services no longer serving requests.'
+    ],
+    [
+      'No longer detecting traffic from designated IP range.'
+    ],
+    [
+      'Ping timeout... Service no longer available.'
+    ]
+
+  ],
+  takedown_failure: [
+    [
+      'Target services operational. Mission failure.'
+    ],
+    [
+      'ICMP Ping responses still being received from target'
+    ],
+    [
+      'Target Host still routable.'
+    ],
+    [
+      '[ERROR] Undesirable Host still sending malicious traffic.'
+    ]
+
   ],
   new_pwn_target: [
     [
@@ -108,6 +199,13 @@ var Generator = {
     [
       '%ip% presents strategic importance.',
       "You know what to do."
+    ],
+    [
+      '%ip% hosting unpatched applications',
+      "[Recommend] Compromise"
+    ],
+    [
+      'Identified usable host: %ip%'
     ]
   ],
   generate_exploit: [
@@ -124,6 +222,35 @@ var Generator = {
       "Please find attached malware sample. Utilises novel techniques for",
       'popping shells on hardened clients.'
     ],
+    [
+      "Message-ID:23F5D632AB:",
+      '',
+      "Check this out - found it in the wild! The way it",
+      'tunnels through the virtualization is quite extraordinary.',
+      '',
+      "EOF"
+    ],
+  ],
+  buy_zeroday: [
+    [
+      'Message:// ',
+      "It's not going to be cheap. But I have a",
+      'feeling your agency will get use out of this.'
+    ],
+    [
+      'From: Unknown Source',
+      'To: Unknown Recipient',
+      "I have contacts in Russia and China. Or I can sell you the code,",
+      'for the right fee, of course...'
+    ],
+    [
+      '"I have something very special indeed. Respond with GPG Pubkey',
+      'if interested"'
+    ],
+    [
+      '"Those clowns thought their poxy bugbounty program would cover"',
+      '0day of this magnitude, heh. Assume you have better ideas?"'
+    ]
   ],
   win_proxy: [
     [
@@ -131,8 +258,13 @@ var Generator = {
       'OnionRouting.exe deploy: [ OK ]'
     ],
     [
-      'Host Compromise Success.',
-      'OnionRouting.exe deploy: [ OK ]'
+      'Tor node initialized'
+    ],
+    [
+      'Added to VPN chain.'
+    ],
+    [
+      'Traffic Anonymisation installed on node.'
     ]
   ],
   win_botnet: [
@@ -141,8 +273,28 @@ var Generator = {
       'Command and Control server received Ping.'
     ],
     [
-      'Root Access Granted',
-      'Command and Control server received Ping.'
+      'Node added. Email lists downloaded. Deploying msgs.'
+    ],
+    [
+      'Remote administration tools deployed.'
+    ],
+    [
+      'Compromisation        [ OK ]',
+      'Monetization          [ OK ]'
+    ],
+  ],
+  win_takedown: [
+    [
+      'Host Neutralised'
+    ],
+    [
+      'Network Activity Suppressed'
+    ],
+    [
+      'No longer reachable.'
+    ],
+    [
+      '0 bytes sniffed from MitM. Host assumed neutralised.'
     ]
   ],
   garbage: "!£$%^&*:@~;'#/\\1234567890_-=+",
@@ -175,7 +327,7 @@ var Generator = {
   },
   message_new_pwn_target: function(target)
   {
-    lines = this.new_pwn_target[Math.floor(Math.random() * this.new_pwn_target.length)]
+    var lines = this.new_pwn_target[Math.floor(Math.random() * this.new_pwn_target.length)]
 
     lines = lines.map(function(line) {
       return line.replace('%ip%', target.ip)
@@ -183,12 +335,53 @@ var Generator = {
 
     return lines
   },
+  message_new_calendar_target: function(target, day)
+  {
+    var lines = this.new_calendar_target[Math.floor(Math.random() * this.new_calendar_target.length)]
+
+    lines = lines.map(function(line) {
+      line = line.replace('%ip%', target.ip)
+      line = line.replace('%date%', GameDay.displayDate(day))
+
+      return line
+    });
+
+    return lines
+  },
+  message_check_calendar_target: function(target, day)
+  {
+    var lines = this.check_calendar_target[Math.floor(Math.random() * this.check_calendar_target.length)]
+
+    lines = lines.map(function(line) {
+      line = line.replace('%ip%', target.ip)
+      line = line.replace('%date%', GameDay.displayDate(day))
+
+      return line
+    });
+
+    return lines
+  },
+  message_takedown_failure: function(amt)
+  {
+    var msg = this.takedown_failure[Math.floor(Math.random() * this.takedown_failure.length)]
+    return msg.concat(['', (amt*2) + '% Approval Rating Lost'])
+  },
+  message_takedown_success: function(amt)
+  {
+    var msg = this.takedown_success[Math.floor(Math.random() * this.takedown_success.length)]
+    return msg.concat(['', (amt*2) + '% Approval Rating Gained'])
+  },
+
   message_generate_exploit: function()
   {
-    lines =   this.generate_exploit[Math.floor(Math.random() * this.generate_exploit.length)]
+    var lines = this.generate_exploit[Math.floor(Math.random() * this.generate_exploit.length)]
     lines = lines.concat(['','1 Exploit Found.'])
 
     return lines
+  },
+  message_buy_zeroday: function(price) {
+    var lines = this.buy_zeroday[Math.floor(Math.random() * this.buy_zeroday.length)]
+    return lines.concat(['', 'Buy Zeroday Exploit for '+price.toFixed(8)+" BTC?", "(Current Assets: " + GamePlayer.totals.btc.toFixed(8) + " BTC)"])
   },
   message_win_botnet: function()
   {
@@ -200,9 +393,14 @@ var Generator = {
     var msg = this.win_proxy[Math.floor(Math.random() * this.win_proxy.length)]
     return msg.concat(['', 'Node added to proxy array.'])
   },
+  message_win_takedown: function()
+  {
+    var msg = this.win_takedown[Math.floor(Math.random() * this.win_takedown.length)]
+    return msg.concat(['', 'Takedown Objective Complete.'])
+  },
   member_stats: function(member)
   {
-    stats =  [
+    var stats =  [
       '',
       'Codename:     ' + member.name,
       'Attribution:  ' + member.skills.attribution.toFixed(3),
@@ -222,16 +420,17 @@ var Generator = {
   target_stats: function(target)
   {
     var target_stats = [
-      'IP:             ' + target.ip,
-      'Attribution:    ' + target.stats.attribution,
-      'Scannability:   ' + target.stats.scannability,
-      'Exploitability: ' + target.stats.exploitability,
-      'Pwnability:     ' + target.stats.pwnability,
       '',
-      'Mission Type:   ' + target.type
+      '',
+      //'Scanning:       ' + target.stats.scannability,
+      //'Exploitability: ' + target.stats.exploitability,
+      'Mission Type:   ' + target.type,
+      'IP:             ' + target.ip,
+      'Defensibility:  ' + target.stats.pwnability,
+      'Attribution:    ' + target.stats.attribution.toFixed(0)+"%",
     ]
 
-    us_stats = this.get_total_skills();
+    var us_stats = this.get_total_skills();
 
     for(var i=0; i<target_stats.length;i++)
     {

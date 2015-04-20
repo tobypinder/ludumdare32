@@ -147,6 +147,10 @@ var GameAction = {
           Attack.start(Targets.currentTarget, 'botnet')
           // TODO: Chance
         break;
+        case 'Takedown':
+          Attack.start(Targets.currentTarget, 'takedown')
+          // TODO: Chance
+        break;
 
         case 'Exploit':
           if(Attack.in_progress === true && GamePlayer.totals.exploits.standard > 0)
