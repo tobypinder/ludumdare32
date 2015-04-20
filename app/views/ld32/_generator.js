@@ -17,6 +17,12 @@ var Generator = {
     'SAND',
     'CYBER',
     'POV',
+    'KEY',
+    'GRID',
+    'PLAY',
+    'DATA',
+    'JACK',
+    'STEAM'
   ],
   p2: [
     'FOX',
@@ -34,7 +40,9 @@ var Generator = {
     'STORM',
     'COMMANDO',
     'DARE',
-    'CAT'
+    'CAT',
+    'BUS',
+    'SPIKE'
   ],
   attack: [
     'Bypassing Firewall',
@@ -42,7 +50,20 @@ var Generator = {
     'Attack Surface Identified',
     'Port Knocking Circumvented',
     'Authentication Downgrade',
-    'MitM Activated'
+    'MitM Activated',
+    'Countermeasures Bypassed',
+    'Phished Credentials',
+    'Antivirus Disabled',
+    'Hash Collision Found',
+    'Logfiles Expunged',
+    'Buffer Overflow',
+    'Buffer Underflow',
+    'SQL Injected',
+    'CSRF Injected',
+    'RAM Corrupted',
+    'Forkbomb Deployed',
+    'Rootkit on System',
+    'C++ Compiler Compromised'
   ],
   defend: [
     'Nullrouted Malicious IP range',
@@ -50,7 +71,16 @@ var Generator = {
     'Address Space Randomized',
     'PKI Keys Revoked',
     'Passwords Changed',
-    'Honeypot Tripwire Activated'
+    'Honeypot Tripwire Activated',
+    'AV Signatures Updated',
+    'Critical Systems Sandboxed',
+    '2FA Enabled',
+    'PBKDF2 Iterations Increased',
+    'Malicious Traffic Nullrouted',
+    'Sysadmins Alerted',
+    'Terminated Remote Shell',
+    'Non-critical System Shutdown',
+    'Rebuild from Factory Image'
   ],
   member_refusal: [
     [
