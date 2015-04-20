@@ -198,7 +198,7 @@ var GameViewText = {
 
     this.advanceChars(7);
 
-    GameView.ctx.font="24px Ubuntu Mono";
+    GameView.ctx.font="24px ubuntu_monoregular";
 
     for(var i=0;i<this.lines;i++)
     {
